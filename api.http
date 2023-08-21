@@ -1,1 +1,15 @@
-http://localhost:3000/
+GET http://localhost:3000/
+
+###
+GET http://localhost:3000/routes
+
+###
+GET http://localhost:3000/routes/1
+
+### 
+POST http://localhost:3000/routes
+Content-Type: application/json
+
+{
+
+}
