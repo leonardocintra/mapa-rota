@@ -28,6 +28,6 @@ type Place {
 }
 
 type Coord {
-  latitude  Float
-  longitude Float
+  lat  Float
+  lng Float
 }

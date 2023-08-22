@@ -19,4 +19,7 @@ Content-Type: application/json
 ### Coisas do mapa
 
 ### Pegar o place_id
-GET http://localhost:3000/places?text=rua seis de abril, ibiraci
+GET http://localhost:3000/places?text=rua jose patrocinio franca 2401
+
+### Pegar direções entre 2 pontos
+GET http://localhost:3000/directions?originId=ChIJXR0wAQrIsJQRdSxVlZd6B7Y&destinationId=ChIJg4zjaW2msJQRSX6Hcn5BG70
