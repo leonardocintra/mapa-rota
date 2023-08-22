@@ -1,5 +1,5 @@
 GET http://localhost:3000/
-
+npm i -g create-next-app
 ###
 GET http://localhost:3000/routes
 
