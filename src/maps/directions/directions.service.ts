@@ -31,15 +31,15 @@ export class DirectionsService {
         origin: {
           place_id: requestParams.origin,
           location: {
-            latitude: data.routes[0].legs[0].start_location.lat,
-            longitude: data.routes[0].legs[0].start_location.lng,
+            lat: data.routes[0].legs[0].start_location.lat,
+            lng: data.routes[0].legs[0].start_location.lng,
           },
         },
         destination: {
           place_id: requestParams.destination,
           location: {
-            latitude: data.routes[0].legs[0].end_location.lat,
-            longitude: data.routes[0].legs[0].end_location.lng,
+            lat: data.routes[0].legs[0].end_location.lat,
+            lng: data.routes[0].legs[0].end_location.lng,
           },
         },
         mode: requestParams.mode,

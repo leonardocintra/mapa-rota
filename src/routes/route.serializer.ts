@@ -4,8 +4,8 @@ import { Route } from "@prisma/client";
 export class RouteSerializer implements Omit<Route, 'directions'> {
   id: string;
   name: string;
-  source: { name: string; } & { location: { latitude: number; longitude: number; }; };
-  destination: { name: string; } & { location: { latitude: number; longitude: number; }; };
+  source: { name: string; } & { location: { lat: number; lng: number; }; };
+  destination: { name: string; } & { location: { lat: number; lng: number; }; };
   distance: number;
   duration: number;
   directions: DirectionsResponseData & { request: any }

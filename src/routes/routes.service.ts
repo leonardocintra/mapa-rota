@@ -26,15 +26,15 @@ export class RoutesService {
         source: {
           name: legs.start_address,
           location: {
-            latitude: legs.start_location.lat,
-            longitude: legs.start_location.lng,
+            lat: legs.start_location.lat,
+            lng: legs.start_location.lng,
           },
         },
         destination: {
           name: legs.end_address,
           location: {
-            latitude: legs.end_location.lat,
-            longitude: legs.end_location.lng,
+            lat: legs.end_location.lat,
+            lng: legs.end_location.lng,
           },
         },
         distance: legs.distance.value,
