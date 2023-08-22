@@ -4,22 +4,23 @@ GET http://localhost:3000/
 GET http://localhost:3000/routes
 
 ###
-GET http://localhost:3000/routes/1
+GET http://localhost:3000/routes/64e4dff8224ab4a235ea0a4a
 
 ### 
 POST http://localhost:3000/routes
 Content-Type: application/json
 
 {
-  "name": "Ronaldo Teste 1",
-  "source_id": "1",  
-  "destination_id": "2"
+  "name": "Ronaldo Teste 2",
+  "source_id": "ChIJg2nva4CnsJQRS9kSDOlAvVM",  
+  "destination_id": "ChIJg4zjaW2msJQRSX6Hcn5BG70"
+  
 }
 
 ### Coisas do mapa
 
 ### Pegar o place_id
-GET http://localhost:3000/places?text=rua jose patrocinio franca 2401
+GET http://localhost:3000/places?text=av marcio severino meirelles franca
 
 ### Pegar direções entre 2 pontos
 GET http://localhost:3000/directions?originId=ChIJXR0wAQrIsJQRdSxVlZd6B7Y&destinationId=ChIJg4zjaW2msJQRSX6Hcn5BG70
