@@ -5,7 +5,7 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
+		"../docker-compose.yaml",
 		"docker-compose.yml"
 	],
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -22,6 +22,15 @@
 		},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
 	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"humao.rest-client",
+				"redjue.git-commit-plugin"
+			]
+		}
+	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -33,16 +42,7 @@
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "cat /etc/os-release",
 	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"dbaeumer.vscode-eslint",
-				"humao.rest-client",
-				"prisma.prisma",
-				"redjue.git-commit-plugin"
-			]
-		}
-	}
+	// "customizations": {},
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
 }
