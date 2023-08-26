@@ -3,15 +3,15 @@ import { PrismaService } from '../../prisma/prisma/prisma.service';
 
 @Injectable()
 export class RoutesDriverService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
-  async createOrUpdate(dto: { route_id: string, lat: number, lng: number }) {
+  async createOrUpdate(dto: { route_id: string; lat: number; lng: number }) {
     return this.prismaService.routeDriver.upsert({
       include: {
-        route: true
+        route: true,
       },
       where: {
-        route_id: dto.route_id
+        route_id: dto.route_id,
       },
       create: {
         route_id: dto.route_id,
@@ -19,21 +19,21 @@ export class RoutesDriverService {
           set: {
             location: {
               lat: dto.lat,
-              lng: dto.lng
-            }
-          }
-        }
+              lng: dto.lng,
+            },
+          },
+        },
       },
       update: {
         points: {
           push: {
             location: {
               lat: dto.lat,
-              lng: dto.lng
-            }
-          }
-        }
+              lng: dto.lng,
+            },
+          },
+        },
       },
-    })
+    });
   }
 }

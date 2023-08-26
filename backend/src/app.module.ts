@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RoutesModule } from './routes/routes.module';
 import { ConfigModule } from '@nestjs/config';
 import { MapsModule } from './maps/maps.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -12,6 +13,12 @@ import { MapsModule } from './maps/maps.module';
       isGlobal: true,
     }),
     PrismaModule,
+    BullModule.forRoot({
+      redis: {
+        port: 6379,
+        host: 'redis',
+      },
+    }),
     RoutesModule,
     MapsModule,
   ],

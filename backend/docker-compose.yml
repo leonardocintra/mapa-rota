@@ -16,6 +16,8 @@ services:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_KEY: 123456
       MONGODB_DATABASE: nest
+  redis:
+    image: redis:7.2.0-alpine
 
 volumes:
   mongodb_data:

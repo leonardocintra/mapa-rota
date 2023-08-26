@@ -4,10 +4,14 @@ import type {
   DirectionsResponseData,
   FindPlaceFromTextResponseData,
 } from "@googlemaps/google-maps-services-js";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useMap } from "../hooks/useMap";
+import useSwr from "swr";
+import { fetcher } from "../utils/http";
+import { Route } from "../utils/model";
+import { socket } from "../utils/socket-io";
 
-export default function NewRoutePage() {
+export default function DriverPage() {
   const BASE_PATH: string = "http://localhost:3000";
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -15,6 +19,21 @@ export default function NewRoutePage() {
   const [directionsData, setDirectionsData] = useState<
     DirectionsResponseData & { request: any }
   >();
+
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const {
+    data: routes,
+    error,
+    isLoading,
+  } = useSwr<Route[]>(`${BASE_PATH}/routes`, fetcher, {
+    fallbackData: [],
+  });
 
   async function searchPlaces(event: FormEvent) {
     event.preventDefault();
@@ -32,6 +51,8 @@ export default function NewRoutePage() {
     const [sourcePlace, destinationPlace]: FindPlaceFromTextResponseData[] =
       await Promise.all([sourceResponse.json(), destinationResponse.json()]);
 
+    console.log(destinationPlace);
+
     if (sourcePlace.status !== "OK") {
       console.error(sourcePlace);
       alert("Não foi possivel encontrar a origem");
@@ -46,6 +67,8 @@ export default function NewRoutePage() {
 
     const placeSourceId = sourcePlace.candidates[0].place_id;
     const placeDestinationId = destinationPlace.candidates[0].place_id;
+    console.log(placeSourceId);
+    console.log(placeDestinationId);
 
     const directionsResponse = await fetch(
       `${BASE_PATH}/directions?originId=${placeSourceId}&destinationId=${placeDestinationId}`
@@ -90,6 +113,47 @@ export default function NewRoutePage() {
     const route = await response.json();
   }
 
+  async function startRoute() {
+    const routeId = (document.getElementById("route") as HTMLSelectElement)
+      .value;
+    const response = await fetch(`${BASE_PATH}/routes/${routeId}`);
+    const route: Route = await response.json();
+
+    map?.removeAllRoutes();
+    await map?.addRouteWithIcons({
+      routeId: routeId,
+      startMarkerOptions: {
+        position: route.directions.routes[0].legs[0].start_location,
+      },
+      endMarkerOptions: {
+        position: route.directions.routes[0].legs[0].end_location,
+      },
+      carMarkerOptions: {
+        position: route.directions.routes[0].legs[0].start_location,
+      },
+    });
+
+    const { steps } = route.directions.routes[0].legs[0];
+
+    for (const step of steps) {
+      await sleep(3000);
+      map?.moveCar(routeId, step.start_location);
+      socket.emit("new-point", {
+        route_id: routeId,
+        lat: step.start_location.lat,
+        lng: step.start_location.lng,
+      });
+
+      await sleep(3000);
+      map?.moveCar(routeId, step.end_location);
+      socket.emit("new-point", {
+        route_id: routeId,
+        lat: step.end_location.lat,
+        lng: step.end_location.lng,
+      });
+    }
+  }
+
   return (
     <div
       style={{
@@ -100,29 +164,20 @@ export default function NewRoutePage() {
       }}
     >
       <div>
-        <h1>Nova rota</h1>
-        <form
-          method="post"
-          style={{ display: "flex", flexDirection: "column" }}
-          onSubmit={searchPlaces}
-        >
-          <div>
-            <input id="source" type="text" placeholder="Origem ..." />
-          </div>
-          <div>
-            <input id="destination" type="text" placeholder="Destino ..." />
-          </div>
-          <button type="submit">Pesquisar</button>
-        </form>
-        {directionsData && (
-          <ul>
-            <li>Origem: {directionsData.routes[0].legs[0].start_address}</li>
-            <li>Destino: {directionsData.routes[0].legs[0].end_address}</li>
-            <li>
-              <button onClick={createRoute}>Criar rota</button>
-            </li>
-          </ul>
-        )}
+        <h1>Minha Viagem</h1>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <select id="route">
+            {isLoading && <option>Carregando rotas ...</option>}
+            {routes!.map((route) => (
+              <option key={route.id} value={route.id}>
+                {route.name}
+              </option>
+            ))}
+          </select>
+          <button type="submit" onClick={startRoute}>
+            Iniciar a Viagem
+          </button>
+        </div>
       </div>
       <div
         id="google-map"
@@ -135,3 +190,5 @@ export default function NewRoutePage() {
     </div>
   );
 }
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

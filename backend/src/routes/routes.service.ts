@@ -9,44 +9,48 @@ export class RoutesService {
   constructor(
     private prismaService: PrismaService,
     private directionService: DirectionsService,
-  ) { }
+  ) {}
 
   async create(createRouteDto: CreateRouteDto) {
-    const { available_travel_modes, geocoded_waypoints, routes, request } =
-      await this.directionService.getDirections(
-        createRouteDto.source_id,
-        createRouteDto.destination_id,
-      );
+    try {
+      const { available_travel_modes, geocoded_waypoints, routes, request } =
+        await this.directionService.getDirections(
+          createRouteDto.source_id,
+          createRouteDto.destination_id,
+        );
 
-    const legs = routes[0].legs[0];
+      const legs = routes[0].legs[0];
 
-    return this.prismaService.route.create({
-      data: {
-        name: createRouteDto.name,
-        source: {
-          name: legs.start_address,
-          location: {
-            lat: legs.start_location.lat,
-            lng: legs.start_location.lng,
+      return this.prismaService.route.create({
+        data: {
+          name: createRouteDto.name,
+          source: {
+            name: legs.start_address,
+            location: {
+              lat: legs.start_location.lat,
+              lng: legs.start_location.lng,
+            },
           },
-        },
-        destination: {
-          name: legs.end_address,
-          location: {
-            lat: legs.end_location.lat,
-            lng: legs.end_location.lng,
+          destination: {
+            name: legs.end_address,
+            location: {
+              lat: legs.end_location.lat,
+              lng: legs.end_location.lng,
+            },
           },
+          distance: legs.distance.value,
+          duration: legs.duration.value,
+          directions: JSON.stringify({
+            available_travel_modes,
+            geocoded_waypoints,
+            routes,
+            request,
+          }),
         },
-        distance: legs.distance.value,
-        duration: legs.duration.value,
-        directions: JSON.stringify({
-          available_travel_modes,
-          geocoded_waypoints,
-          routes,
-          request
-        }),
-      },
-    });
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   findAll() {
@@ -55,8 +59,8 @@ export class RoutesService {
 
   findOne(id: string) {
     return this.prismaService.route.findUniqueOrThrow({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   update(id: number, updateRouteDto: UpdateRouteDto) {
