@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { RoutesService } from './routes.service';
 import { CreateRouteDto } from './dto/create-route.dto';
-import { UpdateRouteDto } from './dto/update-route.dto';
 import { RouteSerializer } from './route.serializer';
 
 @Controller('routes')
@@ -32,15 +23,5 @@ export class RoutesController {
   async findOne(@Param('id') id: string) {
     const route = await this.routesService.findOne(id);
     return new RouteSerializer(route);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRouteDto: UpdateRouteDto) {
-    return this.routesService.update(+id, updateRouteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.routesService.remove(+id);
   }
 }

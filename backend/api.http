@@ -11,7 +11,7 @@ POST http://localhost:3000/routes
 Content-Type: application/json
 
 {
-  "name": "Ronaldo Teste 2",
+  "name": "Teste Kafka 5",
   "source_id": "ChIJg2nva4CnsJQRS9kSDOlAvVM",  
   "destination_id": "ChIJg4zjaW2msJQRSX6Hcn5BG70"
   
@@ -20,7 +20,7 @@ Content-Type: application/json
 ### Coisas do mapa
 
 ### Pegar o place_id
-GET http://localhost:3000/places?text=av marcio severino meirelles franca
+GET http://localhost:3000/places?text=rua seis de abril, ibiraci, mg
 
 ### Pegar direções entre 2 pontos
 GET http://localhost:3000/directions?originId=ChIJXR0wAQrIsJQRdSxVlZd6B7Y&destinationId=ChIJg4zjaW2msJQRSX6Hcn5BG70
